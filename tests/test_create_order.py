@@ -4,13 +4,14 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 import pytest
+import allure
 from api.api_client import ApiClient
 
 
 class TestCreateOrder:
     base_url = "https://qa-scooter.praktikum-services.ru"
 
-    # создание заказа
+    @allure.title("Позитивное тестирование создания заказа")
     def test_create_order(self):
         api = ApiClient(self.base_url)
 
@@ -32,7 +33,7 @@ class TestCreateOrder:
 
         assert "track" in r
 
-    # создание заказа с указанием цвета заказа
+    @allure.title("Тестирование создания заказа с указанием разных параметров color")
     @pytest.mark.parametrize(
         "color_data",
         [

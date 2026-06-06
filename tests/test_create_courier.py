@@ -4,13 +4,14 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 import pytest
+import allure
 from api.api_client import ApiClient
 
 
 class TestCreateCourier:
     base_url = "https://qa-scooter.praktikum-services.ru"
 
-    # успешное создание курьера
+    @allure.title("Позитивное тестирование регистрации курьера")
     def test_create_courier_success(self):
         api = ApiClient(self.base_url)
         payload = api.create_courier()
@@ -22,7 +23,7 @@ class TestCreateCourier:
         r = responce.json()
         assert r == {"ok": True}
 
-    # создание дубликата курьера, отображение ошибки при создании дубликата
+    @allure.title("Тестирование создания дубликата курьера")
     def test_create_duplicate_courier(self):
         api = ApiClient(self.base_url)
         payload = api.create_courier()
@@ -36,7 +37,9 @@ class TestCreateCourier:
         sr = second_responce.json()
         assert sr["message"] == "Этот логин уже используется. Попробуйте другой."
 
-    # создание курьера без заполнения обязательных полей
+    @allure.title(
+        "Тестирование регистрации курьера без заполнения одного из обязательных полей"
+    )
     @pytest.mark.parametrize(
         "missing_field, error_message",
         [

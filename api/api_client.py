@@ -4,6 +4,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 import requests
+import allure
 from utils.data import generate_random_string, generate_random_number
 
 
@@ -34,12 +35,14 @@ class ApiClient:
         responce = self.session.request(method, url, **kwargs)
         return responce
 
+    @allure.step("Отправка GET запроса")
     def get(self, endpoint, params=None, headers=None):
         """
         GET запрос
         """
         return self._make_request("GET", endpoint, params=params, headers=headers)
 
+    @allure.step("Отправка POST запроса")
     def post(self, endpoint, data=None, params=None, headers=None):
         """
         POST запрос
@@ -48,6 +51,7 @@ class ApiClient:
             "POST", endpoint, data=data, params=params, headers=headers
         )
 
+    @allure.step("Отправка PUT запроса")
     def put(self, endpoint, data=None, params=None, headers=None):
         """
         PUT запрос
@@ -56,6 +60,7 @@ class ApiClient:
             "PUT", endpoint, data=data, params=params, headers=headers
         )
 
+    @allure.step("Отправка PATCH запроса")
     def patch(self, endpoint, data=None, json=None, headers=None):
         """
         PATCH запрос
@@ -64,12 +69,14 @@ class ApiClient:
             "PATCH", endpoint, data=data, json=json, headers=headers
         )
 
+    @allure.step("Отправка DELETE запроса")
     def delete(self, endpoint, headers=None):
         """
         DELETE запрос
         """
         return self._make_request("DELETE", endpoint, headers=headers)
 
+    @allure.step("Создаём курьера со случайными поля login, password, firstName")
     def create_courier(self):
         """
         Создание random данных для login, password и firstName полей

@@ -3,13 +3,14 @@ import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
+import allure
 from api.api_client import ApiClient
 
 
 class TestGetOrder:
     base_url = "https://qa-scooter.praktikum-services.ru"
 
-    # получение списка заказазов без id курьера
+    @allure.title("Тестирование получения списка заказов без id курьера")
     def test_get_orders(self):
         api = ApiClient(self.base_url)
 
@@ -21,7 +22,7 @@ class TestGetOrder:
 
         assert len(r["orders"]) > 0
 
-    # получить заказ по номеру заказа
+    @allure.title("Тестирование получения заказа по track номеру")
     def test_get_orders_by_track(self):
         api = ApiClient(self.base_url)
 

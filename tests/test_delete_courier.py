@@ -3,13 +3,14 @@ import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
+import allure
 from api.api_client import ApiClient
 
 
 class TestDeleteCourier:
     base_url = "https://qa-scooter.praktikum-services.ru"
 
-    # позитивный тест удаление курьера
+    @allure.title("Позитивное тестирование удаления курьера по id")
     def test_delete_courier_success(self):
         # создать курьера
         api = ApiClient(self.base_url)
@@ -38,7 +39,7 @@ class TestDeleteCourier:
         del_res = delete_courier_by_id_responce.json()
         assert del_res == {"ok": True}
 
-    # негативный тест удаление курьера с несуществующим id
+    @allure.title("Тестирование удаления курьера с несуществующим id")
     def test_delete_courier_without_id(self):
         api = ApiClient(self.base_url)
 
@@ -53,4 +54,3 @@ class TestDeleteCourier:
         dr = delete_responce.json()
 
         assert dr["message"] == "Курьера с таким id нет."
-
