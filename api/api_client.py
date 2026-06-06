@@ -48,6 +48,14 @@ class ApiClient:
             "POST", endpoint, data=data, params=params, headers=headers
         )
 
+    def put(self, endpoint, data=None, params=None, headers=None):
+        """
+        PUT запрос
+        """
+        return self._make_request(
+            "PUT", endpoint, data=data, params=params, headers=headers
+        )
+
     def patch(self, endpoint, data=None, json=None, headers=None):
         """
         PATCH запрос
