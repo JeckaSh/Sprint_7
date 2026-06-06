@@ -1,0 +1,73 @@
+import sys
+import os
+
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+
+import requests
+from utils.data import generate_random_string, generate_random_number
+
+
+class ApiClient:
+    """
+    Базовый API клиент для предоставления методов работы с API
+    """
+
+    def __init__(self, base_url, token=None):
+        self.base_url = base_url
+        self.session = requests.Session()
+
+        if token:
+            self.set_token(token)
+
+    def set_token(self, token):
+        """
+        Установка токена для аутентификации
+        """
+        self.token = token
+        self.session.headers.update({"Authorization": f"{token}"})
+
+    def _make_request(self, method, endpoint, **kwargs):
+        """
+        Общий метод для создания запроса
+        """
+        url = f"{self.base_url}{endpoint}"
+        responce = self.session.request(method, url, **kwargs)
+        return responce
+
+    def get(self, endpoint, params=None, headers=None):
+        """
+        GET запрос
+        """
+        return self._make_request("GET", endpoint, params=params, headers=headers)
+
+    def post(self, endpoint, data=None, params=None, headers=None):
+        """
+        POST запрос
+        """
+        return self._make_request(
+            "POST", endpoint, data=data, params=params, headers=headers
+        )
+
+    def patch(self, endpoint, data=None, json=None, headers=None):
+        """
+        PATCH запрос
+        """
+        return self._make_request(
+            "PATCH", endpoint, data=data, json=json, headers=headers
+        )
+
+    def delete(self, endpoint, headers=None):
+        """
+        DELETE запрос
+        """
+        return self._make_request("DELETE", endpoint, headers=headers)
+
+    def create_courier(self):
+        """
+        Создание random данных для login, password и firstName полей
+        """
+        login = generate_random_string(10)
+        password = generate_random_string(10)
+        firstName = generate_random_string(10)
+
+        return {"login": login, "password": password, "firstName": firstName}
