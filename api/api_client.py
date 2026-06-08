@@ -5,7 +5,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 import requests
 import allure
-from utils.data import generate_random_string, generate_random_number
+from utils.helpers import generate_random_string
+from utils.data import ApiData
 
 
 class ApiClient:
@@ -76,7 +77,7 @@ class ApiClient:
         """
         return self._make_request("DELETE", endpoint, headers=headers)
 
-    @allure.step("Создаём курьера со случайными поля login, password, firstName")
+    @allure.step("Создание курьера со случайными поля login, password, firstName")
     def create_courier(self):
         """
         Создание random данных для login, password и firstName полей
@@ -86,3 +87,51 @@ class ApiClient:
         firstName = generate_random_string(10)
 
         return {"login": login, "password": password, "firstName": firstName}
+
+    @allure.step("Удаление курьера")
+    def delete_courier(self, id):
+        """
+        Удаление курьера по id
+        """
+        return self.delete(f"{ApiData.courier_endpoint}/{id}")
+
+    @allure.step("Создание данных для создания заказа")
+    def create_order(self):
+        """
+        Создание данных для полей заказа
+        """
+        return {
+            "firstName": "Naruto123",
+            "lastName": "Uchiha",
+            "address": "Konoha, 142 apt.",
+            "metroStation": 4,
+            "phone": "+7 800 355 35 35",
+            "rentTime": 5,
+            "deliveryDate": "2020-06-06",
+            "comment": "Saske, come back to Konoha",
+        }
+
+    @allure.step("Создание данных для создания заказа, передаём в [color] цвет заказа")
+    def create_order_with_color(self, color):
+        """
+        Создание данных для полей заказа с возможностью указать цвет заказа
+        """
+        return {
+            "firstName": "Naruto",
+            "lastName": "Uchiha",
+            "address": "Konoha, 142 apt.",
+            "metroStation": 4,
+            "phone": "+7 800 355 35 35",
+            "rentTime": 5,
+            "deliveryDate": "2020-06-06",
+            "comment": "Saske, come back to Konoha",
+            "color": color,
+        }
+
+    @allure.step("Отменяем заказ")
+    def cancel_order(self, track):
+        """
+        Отмена заказа
+        """
+        data = {"track": track}
+        return self.put(ApiData.cancel_order, data=data)

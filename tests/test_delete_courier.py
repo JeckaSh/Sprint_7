@@ -4,53 +4,30 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 import allure
-from api.api_client import ApiClient
+from utils.data import ApiData
 
 
 class TestDeleteCourier:
-    base_url = "https://qa-scooter.praktikum-services.ru"
 
     @allure.title("Позитивное тестирование удаления курьера по id")
-    def test_delete_courier_success(self):
-        # создать курьера
-        api = ApiClient(self.base_url)
-        payload = api.create_courier()
+    def test_delete_courier_success(self, api, create_courier_fixture):
+        courier_id = create_courier_fixture["id"]
 
-        responce = api.post("/api/v1/courier", data=payload)
+        delete_response = api.delete(f"{ApiData.courier_endpoint}/{courier_id}")
+        assert delete_response.status_code == 200
 
-        assert responce.status_code == 201
-
-        # залогинить курьера для получения id
-        login_payload = {"login": payload["login"], "password": payload["password"]}
-
-        login_responce = api.post("/api/v1/courier/login", data=login_payload)
-
-        assert login_responce.status_code == 200
-
-        # удалть курьера по id
-        lg = login_responce.json()
-
-        courier_id = str(lg["id"])
-
-        delete_courier_by_id_responce = api.delete("/api/v1/courier/" + courier_id)
-
-        assert delete_courier_by_id_responce.status_code == 200
-
-        del_res = delete_courier_by_id_responce.json()
-        assert del_res == {"ok": True}
+        del_res = delete_response.json()
+        assert del_res == ApiData.ok_message
 
     @allure.title("Тестирование удаления курьера с несуществующим id")
-    def test_delete_courier_without_id(self):
-        api = ApiClient(self.base_url)
+    def test_delete_courier_without_id(self, api):
 
         id = "0"
 
-        delete_responce = api.delete("/api/v1/courier/" + id)
-
-        print(delete_responce)
+        delete_responce = api.delete(ApiData.courier_endpoint + f"/{id}")
 
         assert delete_responce.status_code == 404
 
         dr = delete_responce.json()
 
-        assert dr["message"] == "Курьера с таким id нет."
+        assert dr["message"] == ApiData.no_courier_with_that_id
