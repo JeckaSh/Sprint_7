@@ -16,3 +16,15 @@ class ApiData:
     )
     not_enough_data_to_login = "Недостаточно данных для входа"
     user_not_found = "Учетная запись не найдена"
+
+    # mock data
+    order_mock = {
+        "firstName": "Naruto123",
+        "lastName": "Uchiha",
+        "address": "Konoha, 142 apt.",
+        "metroStation": 4,
+        "phone": "+7 800 355 35 35",
+        "rentTime": 5,
+        "deliveryDate": "2020-06-06",
+        "comment": "Saske, come back to Konoha",
+    }

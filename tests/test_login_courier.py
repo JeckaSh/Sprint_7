@@ -49,8 +49,6 @@ class TestLoginCourier:
 
         login_responce = api.post(ApiData.courier_login_endpoint, data=login_payload)
 
-        print(login_responce.text)
-
         assert login_responce.status_code == 400
 
         lg = login_responce.json()

@@ -100,33 +100,16 @@ class ApiClient:
         """
         Создание данных для полей заказа
         """
-        return {
-            "firstName": "Naruto123",
-            "lastName": "Uchiha",
-            "address": "Konoha, 142 apt.",
-            "metroStation": 4,
-            "phone": "+7 800 355 35 35",
-            "rentTime": 5,
-            "deliveryDate": "2020-06-06",
-            "comment": "Saske, come back to Konoha",
-        }
+        return ApiData.order_mock
 
     @allure.step("Создание данных для создания заказа, передаём в [color] цвет заказа")
     def create_order_with_color(self, color):
         """
         Создание данных для полей заказа с возможностью указать цвет заказа
         """
-        return {
-            "firstName": "Naruto",
-            "lastName": "Uchiha",
-            "address": "Konoha, 142 apt.",
-            "metroStation": 4,
-            "phone": "+7 800 355 35 35",
-            "rentTime": 5,
-            "deliveryDate": "2020-06-06",
-            "comment": "Saske, come back to Konoha",
-            "color": color,
-        }
+        order_data = ApiData.order_mock
+        order_data["color"] = color
+        return order_data
 
     @allure.step("Отменяем заказ")
     def cancel_order(self, track):
